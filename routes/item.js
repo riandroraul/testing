@@ -1,5 +1,16 @@
 const itemRoutes = require("express").Router();
-const { testItem } = require("../controller/item");
+const {
+  getItems,
+  getItemById,
+  createItem,
+  editItem,
+  deleteItem,
+} = require("../controller/item");
 
-itemRoutes.get("/", testItem);
+itemRoutes.get("/", getItems);
+itemRoutes.get("/idItem/:id", getItemById);
+itemRoutes.post("/create", createItem);
+itemRoutes.put("/edit", editItem);
+itemRoutes.delete("/delete", deleteItem);
+
 module.exports = itemRoutes;
