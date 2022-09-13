@@ -1,6 +1,8 @@
-const { getData, saveData, getOneData } = require("../utils/helper");
-const items = require("../data/items");
+const { getData, saveData, getOneData, editData } = require("../utils/helper");
+// const items = require("../data/items");
+const dataPath = "./data/items.json";
 
+const items = getData(dataPath);
 const getItems = (req, res) => {
   try {
     res.status(200).json({ items, message: "get items", status: 200 });
@@ -13,19 +15,26 @@ const getItems = (req, res) => {
 
 const getItemById = (req, res) => {
   try {
-    // console.log(req.params);
     const id = parseInt(req.params.id);
     const allId = [];
-    items.forEach((item) => {
+    const {
+      data: { qr },
+    } = items;
+    // console.log(qr);
+    qr.map((item) => {
       allId.push(item.id);
     });
     if (!allId.includes(id)) {
       throw new Error("id not found");
     }
-    const result = getOneData(items, id);
-    return res
-      .status(200)
-      .json({ result, message: "get item by id", status: 200 });
+    const result = getOneData(qr, id);
+    return res.status(200).json({
+      headers: {
+        statusCode: 200,
+        message: "Success",
+      },
+      result,
+    });
   } catch (error) {
     res.status(400).json({
       message: error.message,
@@ -39,11 +48,17 @@ const createItem = (req, res) => {
       id: req.body.id,
       nama: req.body.nama,
     };
-    const result = saveData(newItem, items);
-
-    return res
-      .status(200)
-      .json({ result, message: "create item", status: 200 });
+    // const {
+    //   data: { qr },
+    // } = items;
+    const result = saveData(newItem, dataPath);
+    return res.status(200).json({
+      headers: {
+        statusCode: 200,
+        message: "Success",
+      },
+      result,
+    });
   } catch (error) {
     res.status(400).json({
       message: error.message,
@@ -53,6 +68,12 @@ const createItem = (req, res) => {
 
 const editItem = (req, res) => {
   try {
+    const id = parseInt(req.params.id);
+    const updated = {
+      id: req.body.id,
+      nama: req.body.nama,
+    };
+    editData(updated, dataPath, id);
     res.status(200).json({ message: "edit item", status: 200 });
   } catch (error) {
     res.status(400).json({

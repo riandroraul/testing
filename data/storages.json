@@ -1,15 +1,1 @@
-[
-  {
-    "id": 1,
-    "namaItem": "storage 1"
-  },
-  {
-    "id": 2,
-    "namaItem": "storage 2"
-  },
-  {
-    "id": 3,
-    "namaItem": "storage 3"
-  }
-]
-
+[{"id":1,"nama":"storage 1"},{"id":2,"nama":"storage 2"},{"id":4,"nama":"storage 4"},{"id":4,"nama":"storage 4"},{"id":4,"nama":"storage 4"}]

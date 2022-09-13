@@ -9,9 +9,9 @@ const {
 const storageRoutes = require("express").Router();
 
 storageRoutes.get("/", getStorages);
-storageRoutes.get("/:id", getStorageById);
-storageRoutes.post("/createItem", createStorage);
-storageRoutes.put("/editItem", editStorage);
-storageRoutes.delete("/deleteItem", deleteStorage);
+storageRoutes.get("/idStg/:id", getStorageById);
+storageRoutes.post("/createStg", createStorage);
+storageRoutes.put("/editStg/:id", editStorage);
+storageRoutes.delete("/deleteStg", deleteStorage);
 
 module.exports = storageRoutes;

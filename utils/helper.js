@@ -1,12 +1,30 @@
 const fs = require("fs");
 
-const saveData = (data, path) => {
+const saveData = (newData, path) => {
+  // if (!fs.existsSync(path)) {
+  //   fs.writeFileSync(path, `[]`, "utf-8");
+  // }
   const file = fs.readFileSync(path, "utf-8");
   const values = JSON.parse(file);
-  console.log(values);
-  values.push(data);
-  const stringifyData = JSON.stringify(data);
-  fs.writeFileSync(path, stringifyData);
+  // let {
+  //   data: { qr },
+  // } = values;
+  values.push(newData);
+  // console.log(values);
+  const stringifyData = JSON.stringify(values);
+  fs.writeFileSync(path, `${[stringifyData]}`, "utf-8");
+};
+
+const editData = (data, path, id) => {
+  const file = fs.readFileSync(path, "utf-8");
+  const values = JSON.parse(file);
+  for (let i = 0; i < values.length; i++) {
+    if (values[i].id === id) {
+      values[i] = data;
+    }
+  }
+  const stringifyData = JSON.stringify(values);
+  fs.writeFileSync(path, `${[stringifyData]}`, "utf-8");
 };
 
 // const saveData = (data, store) => {
@@ -18,8 +36,8 @@ const saveData = (data, path) => {
 //   fs.writeFileSync("./data/items.js", store);
 // };
 
-const getData = (data) => {
-  const jsonData = fs.readFileSync(data);
+const getData = (path) => {
+  const jsonData = fs.readFileSync(path);
   return JSON.parse(jsonData);
 };
 
@@ -33,4 +51,4 @@ const getOneData = (data, id) => {
   return result;
 };
 
-module.exports = { saveData, getData, getOneData };
+module.exports = { saveData, getData, getOneData, editData };

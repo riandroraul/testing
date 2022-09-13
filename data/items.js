@@ -6,3 +6,22 @@ const items = [
 ];
 
 module.exports = items;
+
+/* 
+[
+  {
+    "id" : 1,
+    "item": {
+      "item1": "item 1",
+      "item2": "item 2"
+    }
+  },
+  {
+    "id" : 2,
+    "item": {
+      "item1": "item 1",
+      "item2": "item 2"
+    }
+  }
+]
+*/

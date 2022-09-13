@@ -10,7 +10,7 @@ const {
 itemRoutes.get("/", getItems);
 itemRoutes.get("/idItem/:id", getItemById);
 itemRoutes.post("/create", createItem);
-itemRoutes.put("/edit", editItem);
-itemRoutes.delete("/delete", deleteItem);
+itemRoutes.put("/editItem/:id", editItem);
+itemRoutes.delete("/deleteItem", deleteItem);
 
 module.exports = itemRoutes;
