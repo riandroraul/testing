@@ -1,5 +1,6 @@
 const itemRoutes = require("./routes/item");
 const storageRoutes = require("./routes/storage");
+const assignRoutes = require("./routes/assign");
 const bodyParser = require("body-parser");
 
 const app = require("express")();
@@ -15,6 +16,7 @@ app.use(
 );
 
 app.use("/storage", storageRoutes);
+app.use("/assignItem", assignRoutes);
 app.use("/item", itemRoutes);
 
 const server = app.listen(port, () => {

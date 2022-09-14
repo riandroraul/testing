@@ -1,1 +1,9 @@
-[{"id":1,"nama":"storage 1"},{"id":2,"nama":"storage 2"},{"id":4,"nama":"storage 4"},{"id":4,"nama":"storage 4"},{"id":4,"nama":"storage 4"}]
+[
+  { "id": 1, "nama": "storage 1" },
+  { "id": 2, "nama": "storage 2" },
+  { "id": 3, "nama": "storage 3" },
+  { "id": 4, "nama": "storage 4" },
+  { "id": 5, "nama": "storage 5" },
+  { "id": 7, "nama": "storage 7" },
+  { "id": 6, "nama": "storage 9" }
+]

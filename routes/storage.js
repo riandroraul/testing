@@ -12,6 +12,6 @@ storageRoutes.get("/", getStorages);
 storageRoutes.get("/idStg/:id", getStorageById);
 storageRoutes.post("/createStg", createStorage);
 storageRoutes.put("/editStg/:id", editStorage);
-storageRoutes.delete("/deleteStg", deleteStorage);
+storageRoutes.delete("/deleteStg/:id", deleteStorage);
 
 module.exports = storageRoutes;
