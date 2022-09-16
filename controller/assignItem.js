@@ -93,8 +93,6 @@ const saveItemToBigStorage = (req, res) => {
         } else {
           objBigStg[i].items.push({ id: resultSmallStg[0].items[0].id });
         }
-      } else {
-        objBigStg.push(resultSmallStg[0]);
       }
     }
     // console.log(objBigStg, 91);
