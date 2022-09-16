@@ -31,8 +31,8 @@ const saveItemToStorage = (req, res) => {
             if (values[i].items[j].id === idItem) {
               throw new Error("id item already stored");
             }
+            values[i].items.push({ id: item.id });
           }
-          values[i].items.push({ id: item.id });
         }
       }
     }
@@ -56,51 +56,51 @@ const saveItemToBigStorage = (req, res) => {
     }
     const fileStg = fs.readFileSync(dataStg, "utf-8");
     const fileStgItems = fs.readFileSync(bigStg, "utf-8");
-    const values = JSON.parse(fileStg);
-    const valuesStgItems = JSON.parse(fileStgItems);
-    // console.log(values);
+    const objSmallStg = JSON.parse(fileStg);
+    const objBigStg = JSON.parse(fileStgItems);
     const item = getOneData(items, idItem);
-    for (let i = 0; i < values.length; i++) {
-      if (values[i].id === idStg) {
-        if (!values[i].hasOwnProperty("items")) {
-          Object.assign(values[i], { items: [{ id: item.id }] });
-          valuesStgItems.push(values[i]);
-          // valuesStgItems.forEach((val) => {
-          //   console.log(val);
-          //   if (val.id === idStg) {
-          //     val.items.forEach((item) => {
-          //       if (item.id === idItem) {
-          //         throw new Error("id item already stored");
-          //       }
-          //     });
-          //     val.items.push({ id: item.id });
-          //   }
-          //   console.log(valuesStgItems);
-          // });
-          for (let j = 0; j < valuesStgItems.length; j++) {
-            if (valuesStgItems[j].id === idStg) {
-              console.log(valuesStgItems);
-              for (let k = 0; k < valuesStgItems[j].items.length; k++) {
-                if (valuesStgItems[j].items[k].id === idItem) {
-                  throw new Error("id item already stored");
-                }
-                valuesStgItems[j].items.push({ id: item.id });
-              }
-            }
-          }
-          console.log(valuesStgItems);
-          // const stringifyData = JSON.stringify(valuesStgItems);
-          // fs.writeFileSync(bigStg, `${stringifyData}`, "utf-8");
+
+    for (let i = 0; i < objSmallStg.length; i++) {
+      if (objSmallStg[i].id === idStg) {
+        if (!objSmallStg[i].hasOwnProperty("items")) {
+          Object.assign(objSmallStg[i], { items: [{ id: item.id }] });
         } else {
-          for (let j = 0; j < values[i].items.length; j++) {
-            if (values[i].items[j].id === idItem) {
+          for (let j = 0; j < objSmallStg[i].items.length; j++) {
+            if (objSmallStg[i].items[j].id === idItem) {
               throw new Error("id item already stored");
             }
-            values[i].items.push({ id: item.id });
           }
+          objSmallStg[i].items.push({ id: item.id });
         }
       }
     }
+    var resultSmallStg = objSmallStg.filter((val) => {
+      if (val.id === idStg) return val;
+    });
+    console.log(resultSmallStg[0].items[0].id);
+    // objBigStg.forEach((val) => {
+    //   console.log(val);
+    // });
+    for (let i = 0; i < objBigStg.length; i++) {
+      // console.log(objBigStg[i]);
+      // console.log(objBigStg[i].id === resultSmallStg[0].id);
+      console.log(resultSmallStg);
+      if (objBigStg[i].id === resultSmallStg[0].id) {
+        if (!objBigStg[i].hasOwnProperty("items")) {
+          Object.assign(objBigStg[i], {
+            items: [{ id: resultSmallStg[0].items[0].id }],
+          });
+        } else {
+          objBigStg[i].items.push({ id: resultSmallStg[0].items[0].id });
+        }
+      } else {
+        objBigStg.push(resultSmallStg[0]);
+      }
+    }
+    // console.log(objBigStg, 91);
+    const stringifyData = JSON.stringify(objBigStg);
+    fs.writeFileSync(bigStg, `${[stringifyData]}`, "utf-8");
+
     // console.log(values);
     // const stringifyData = JSON.stringify(values);
     // fs.writeFileSync(dataStg, `${[stringifyData]}`, "utf-8");
