@@ -1,11 +1,11 @@
 const assignRoutes = require("express").Router();
 const {
-  saveItemToStorage,
   searchItemInStorage,
+  searchItemInBigStorage,
   saveItemToBigStorage,
 } = require("../controller/assignItem");
 
 assignRoutes.post("/", saveItemToBigStorage);
-assignRoutes.get("/search", searchItemInStorage);
+assignRoutes.get("/search", searchItemInBigStorage);
 
 module.exports = assignRoutes;

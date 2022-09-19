@@ -94,7 +94,6 @@ const saveItemToBigStorage = (req, res) => {
           } else {
             objBigStg[i].items.forEach((item) => {
               if (item.id === resultSmallStg[0].items[0].id) {
-                console.log("here");
                 throw new Error("id item already stored");
               }
             });
@@ -144,8 +143,22 @@ const searchItemInStorage = (req, res) => {
   }
 };
 
+const searchItemInBigStorage = (req, res) => {
+  try {
+    const objBigStg = JSON.parse(fs.readFileSync(bigStg, "utf-8"));
+    res
+      .status(200)
+      .json({ message: "berhasil", status: 200, result: objBigStg });
+  } catch (error) {
+    res.status(400).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   saveItemToStorage,
   searchItemInStorage,
   saveItemToBigStorage,
+  searchItemInBigStorage,
 };
