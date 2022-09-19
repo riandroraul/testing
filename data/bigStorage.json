@@ -2,10 +2,18 @@
   { "id": 1, "nama": "storage 1", "items": [{ "id": 5 }] },
   { "id": 2, "nama": "storage 2", "items": [{ "id": 2 }] },
   { "id": 4, "nama": "storage 4" },
-  { "id": 5, "nama": "storage 5", "items": [{ "id": 3 }] },
+  { "id": 5, "nama": "storage 5", "items": [{ "id": 3 }, { "id": 5 }] },
+  {
+    "id": 6,
+    "nama": "storage 6",
+    "items": [{ "id": 3 }, { "id": 4 }, { "id": 5 }]
+  },
   {
     "id": 3,
     "nama": "storage 3",
     "items": [{ "id": 1 }, { "id": 2 }, { "id": 2 }]
-  }
+  },
+  { "id": 7, "nama": "storage 7", "items": [{ "id": 5 }] },
+  { "id": 9, "nama": "storage 9", "items": [{ "id": 5 }] },
+  { "id": 8, "nama": "storage 8", "items": [{ "id": 5 }, { "id": 6 }] }
 ]
