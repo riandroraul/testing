@@ -1,106 +1,89 @@
-const {
-  getData,
-  getOneData,
-  saveData,
-  editData,
-  deleteData,
-  cekId,
-} = require("../utils/helper");
-const dataPath = "./data/storages.json";
-const storages = getData(dataPath);
-const allId = cekId(storages);
+const smallStorage = require("../models/smallStorage");
+const { getAllData, addData } = require("../utils/itemHelper");
 
-const getStorages = (req, res) => {
+const getStorages = async (req, res) => {
   try {
-    const storages = getData(dataPath);
-    res.status(200).json({ message: "get storages", status: 200, storages });
+    const storages = await getAllData(smallStorage);
+    res.status(200).json(storages);
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
+    res.json({
+      message: error.message,
     });
   }
 };
 
-const getStorageById = (req, res) => {
+const getStorageById = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (!allId.includes(id)) {
-      throw new Error("id not found");
+    const storage = await smallStorage.findOne({ _id: req.params.id });
+    if (!storage) {
+      throw new Error("id not found", res.status(404));
     }
-    const result = getOneData(storages, id);
-    return res.status(200).json({
-      headers: {
-        statusCode: 200,
-        message: "Success",
-      },
-      result,
+    res.status(200).json({
+      storage,
+      message: "storage ditemukan",
     });
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
+    res.json({
+      message: error.message,
+      status: 404,
     });
   }
 };
 
-const createStorage = (req, res) => {
+const createStorage = async (req, res) => {
   try {
-    const newStg = {
-      id: req.body.id,
-      nama: req.body.nama,
-    };
-    if (allId.includes(newStg.id)) {
-      throw new Error("id already used");
-    }
-    const created = saveData(newStg, dataPath);
-    return res.status(200).json({
-      message: "storage added",
-      status: 200,
-      created,
-    });
+    const newStorage = addData(smallStorage, req);
+    const addStorage = await newStorage.save();
+    res.status(200).json({ addStorage, message: "new storage added" });
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
+    res.json({
+      message: error.message,
+      status: 400,
     });
   }
 };
 
-const editStorage = (req, res) => {
+const editStorage = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (!allId.includes(id)) {
-      throw new Error("id not found");
+    const item = await smallStorage.findOne({ _id: req.params.id });
+    if (!item) {
+      throw new Error("id not found", res.status(404));
     }
-    const updated = {
-      id: id,
-      nama: req.body.nama,
-    };
-    editData(updated, dataPath, id);
-    res.status(200).json({ message: "storage updated", status: 200 });
-  } catch (error) {
-    console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
-    });
+    const itemUpdated = await smallStorage.updateOne(
+      { _id: req.params.id },
+      {
+        $set: {
+          nama: req.body.nama,
+        },
+      }
+    );
+    res
+      .status(200)
+      .json({ itemUpdated, message: "Data smallStorage Berhasil Di Ubah" });
+  } catch (err) {
+    res.json({ message: err.message });
   }
 };
 
-const deleteStorage = (req, res) => {
+const deleteStorage = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (!allId.includes(id)) {
-      throw new Error("id not found");
+    const deleteStorage = await smallStorage.deleteOne({ _id: req.params.id });
+    if (!deleteStorage) {
+      throw new Error("id not found", res.status(400));
     }
-    deleteData(dataPath, id);
-    res.status(200).json({ message: "storage deleted", status: 200 });
-  } catch (error) {
-    console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
-    });
+    res.status(200).json(deleteStorage);
+  } catch (err) {
+    // res.status(404).json({message: err.message})
+    res.json({ message: "id not found" });
   }
+};
+
+const reqError = (req, res) => {
+  console.log(error.message);
+  res.status(404).json({ status: 404, message: "cannot request with this " });
 };
 
 module.exports = {
@@ -109,4 +92,7 @@ module.exports = {
   createStorage,
   editStorage,
   deleteStorage,
+  reqError,
 };
+
+// module.exports = { getItems };

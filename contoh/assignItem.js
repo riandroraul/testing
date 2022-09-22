@@ -68,14 +68,14 @@ const saveItemToBigStorage = (req, res) => {
         } else {
           for (let j = 0; j < objSmallStg[i].items.length; j++) {
             if (objSmallStg[i].items[j].id === item.id) {
-              throw new Error("id item already stored");
+              throw new Error("id item already stored", res.status(400));
             }
           }
           objSmallStg[i].items.push({ id: idItem });
         }
       }
     }
-    var resultSmallStg = objSmallStg.filter((val) => {
+    let resultSmallStg = objSmallStg.filter((val) => {
       if (val.id === idStg) return val;
     });
     // console.log(resultSmallStg[0]);
@@ -95,7 +95,8 @@ const saveItemToBigStorage = (req, res) => {
           } else {
             objBigStg[i].items.forEach((item) => {
               if (item.id === resultSmallStg[0].items[0].id) {
-                throw new Error("id item already stored");
+                // res.status(400).json({ message: "id item already stored" });
+                throw new Error("id item already stored", res.status(400));
               }
             });
             objBigStg[i].items.push({ id: resultSmallStg[0].items[0].id });
@@ -114,8 +115,9 @@ const saveItemToBigStorage = (req, res) => {
     return res.status(200).json({ message: "Success", status: 200 });
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
+    res.json({
+      message: error.message,
+      status: 400,
     });
   }
 };
@@ -134,13 +136,14 @@ const searchItemInStorage = (req, res) => {
               .json({ message: "Success", status: 200, result });
           }
         }
-        throw new Error("id not found");
+        throw new Error("id not found", res.status(404));
       }
     }
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
+    res.json({
+      message: error.message,
+      status: 404,
     });
   }
 };
@@ -153,8 +156,9 @@ const searchItemInBigStorage = (req, res) => {
       .json({ message: "berhasil", status: 200, result: objBigStg });
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
+    res.json({
+      message: error.message,
+      status: 404,
     });
   }
 };

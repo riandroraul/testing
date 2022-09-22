@@ -16,5 +16,9 @@
   { "id": 7, "nama": "storage 7", "items": [{ "id": 5 }] },
   { "id": 9, "nama": "storage 9", "items": [{ "id": 5 }] },
   { "id": 8, "nama": "storage 8", "items": [{ "id": 5 }, { "id": 6 }] },
-  { "id": 10, "nama": "storage 10", "items": [{ "id": 5 }, { "id": 6 }] }
+  {
+    "id": 10,
+    "nama": "storage 10",
+    "items": [{ "id": 5 }, { "id": 6 }, { "id": 4 }]
+  }
 ]

@@ -1,14 +1,14 @@
+require("dotenv").config();
 const itemRoutes = require("./routes/item");
 const storageRoutes = require("./routes/storage");
-const assignRoutes = require("./routes/assign");
+const bigStgRoutes = require("./routes/bigStorage");
 const bodyParser = require("body-parser");
 
 const app = require("express")();
-require("dotenv").config();
 const port = process.env.PORT;
+require("./database");
 
 app.use(bodyParser.json());
-// app.use(express.json)
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -16,7 +16,7 @@ app.use(
 );
 
 app.use("/storage", storageRoutes);
-app.use("/assignItem", assignRoutes);
+app.use("/bigStorage", bigStgRoutes);
 app.use("/item", itemRoutes);
 
 const server = app.listen(port, () => {

@@ -1,107 +1,89 @@
-const {
-  getData,
-  saveData,
-  getOneData,
-  editData,
-  deleteData,
-  cekId,
-} = require("../utils/helper");
-// const items = require("../data/items");
-const dataPath = "./data/items.json";
-const items = getData(dataPath);
-const allId = cekId(items);
+const Item = require("../models/items");
+const { getAllData, addData } = require("../utils/itemHelper");
 
-const getItems = (req, res) => {
+const getItems = async (req, res) => {
   try {
-    return res.status(200).json({ message: "all items", status: 200, items });
+    const items = await getAllData(Item);
+    res.status(200).json(items);
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
+    res.json({
+      message: error.message,
     });
   }
 };
 
-const getItemById = (req, res) => {
+const getItemById = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (!allId.includes(id)) {
-      throw new Error("id not found");
+    const item = await Item.findOne({ _id: req.params.id });
+    if (!item) {
+      throw new Error("id not found", res.status(404));
     }
-    const result = getOneData(items, id);
-    return res.status(200).json({
-      message: `get item by id = ${id}`,
-      status: 200,
-      result,
+    res.status(200).json({
+      item,
+      message: "buku ditemukan",
     });
   } catch (error) {
     console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
+    res.json({
+      message: error.message,
+      status: 404,
     });
   }
 };
 
-const createItem = (req, res) => {
+const createItem = async (req, res) => {
   try {
-    const newItem = {
-      id: req.body.id,
-      nama: req.body.nama,
-    };
-    if (allId.includes(newItem.id)) {
-      throw new Error("id already used", { status: 400 });
+    const newItem = addData(Item, req);
+    const addItem = await newItem.save();
+    res.status(200).json({ addItem, message: "new item added" });
+  } catch (error) {
+    console.log(error.message);
+    res.json({
+      message: error.message,
+      status: 400,
+    });
+  }
+};
+
+const editItem = async (req, res) => {
+  try {
+    const item = await Item.findOne({ _id: req.params.id });
+    if (!item) {
+      throw new Error("id not found", res.status(404));
     }
-    const created = saveData(newItem, dataPath);
-    return res.status(200).json({
-      message: "storage added",
-      status: 200,
-      created,
-    });
-  } catch (error) {
-    console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
-    });
+    const itemUpdated = await Item.updateOne(
+      { _id: req.params.id },
+      {
+        $set: {
+          nama: req.body.nama,
+        },
+      }
+    );
+    res
+      .status(200)
+      .json({ itemUpdated, message: "Data Item Berhasil Di Ubah" });
+  } catch (err) {
+    res.json({ message: err.message });
   }
 };
 
-const editItem = (req, res) => {
+const deleteItem = async (req, res) => {
   try {
-    const id = parseInt(req.params.id);
-    if (!allId.includes(id)) {
-      throw new Error("id not found");
+    const deleteItem = await Item.deleteOne({ _id: req.params.id });
+    if (!deleteItem) {
+      throw new Error("id not found", res.status(400));
     }
-    const updated = {
-      id: id,
-      nama: req.body.nama,
-    };
-    editData(updated, dataPath, id);
-    res.status(200).json({ message: "item updated", status: 200 });
-  } catch (error) {
-    console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
-    });
-  }
-};
-
-const deleteItem = (req, res) => {
-  try {
-    const id = parseInt(req.params.id);
-    if (!allId.includes(id)) throw new Error("id not found");
-    deleteData(dataPath, id);
-    res.status(200).json({ message: "item deleted", status: 200 });
-  } catch (error) {
-    console.log(error.message);
-    res.status(400).json({
-      message: "an error occured",
-    });
+    res.status(200).json(deleteItem);
+  } catch (err) {
+    // res.status(404).json({message: err.message})
+    res.json({ message: "id not found" });
   }
 };
 
 const reqError = (req, res) => {
   console.log(error.message);
-  res.status(400).json({ status: 400, message: "cannot request with this " });
+  res.status(404).json({ status: 404, message: "cannot request with this " });
 };
 
 module.exports = {
@@ -112,3 +94,5 @@ module.exports = {
   deleteItem,
   reqError,
 };
+
+// module.exports = { getItems };
