@@ -41,8 +41,9 @@ const saveItemToStorage = (req, res) => {
     fs.writeFileSync(dataStg, `${[stringifyData]}`, "utf-8");
     return res.status(200).json({ message: "Success", status: 200 });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -112,8 +113,9 @@ const saveItemToBigStorage = (req, res) => {
     // fs.writeFileSync(dataStg, `${[stringifyData]}`, "utf-8");
     return res.status(200).json({ message: "Success", status: 200 });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -131,14 +133,14 @@ const searchItemInStorage = (req, res) => {
               .status(200)
               .json({ message: "Success", status: 200, result });
           }
-          // throw new Error("id not found");
         }
         throw new Error("id not found");
       }
     }
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -150,8 +152,9 @@ const searchItemInBigStorage = (req, res) => {
       .status(200)
       .json({ message: "berhasil", status: 200, result: objBigStg });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };

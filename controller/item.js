@@ -15,8 +15,9 @@ const getItems = (req, res) => {
   try {
     return res.status(200).json({ message: "all items", status: 200, items });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -24,13 +25,6 @@ const getItems = (req, res) => {
 const getItemById = (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    // const {
-    //   data: { qr },
-    // } = items;
-    // console.log(qr);
-    // items.map((item) => {
-    //   allId.push(item.id);
-    // });
     if (!allId.includes(id)) {
       throw new Error("id not found");
     }
@@ -41,8 +35,9 @@ const getItemById = (req, res) => {
       result,
     });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -56,9 +51,6 @@ const createItem = (req, res) => {
     if (allId.includes(newItem.id)) {
       throw new Error("id already used", { status: 400 });
     }
-    // const {
-    //   data: { qr },
-    // } = items;
     const created = saveData(newItem, dataPath);
     return res.status(200).json({
       message: "storage added",
@@ -66,8 +58,9 @@ const createItem = (req, res) => {
       created,
     });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -85,8 +78,9 @@ const editItem = (req, res) => {
     editData(updated, dataPath, id);
     res.status(200).json({ message: "item updated", status: 200 });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -98,16 +92,16 @@ const deleteItem = (req, res) => {
     deleteData(dataPath, id);
     res.status(200).json({ message: "item deleted", status: 200 });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
 
 const reqError = (req, res) => {
-  res
-    .status(400)
-    .json({ status: 400, message: "cannot request with this endpoint" });
+  console.log(error.message);
+  res.status(400).json({ status: 400, message: "cannot request with this " });
 };
 
 module.exports = {

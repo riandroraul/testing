@@ -15,8 +15,9 @@ const getStorages = (req, res) => {
     const storages = getData(dataPath);
     res.status(200).json({ message: "get storages", status: 200, storages });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -36,8 +37,9 @@ const getStorageById = (req, res) => {
       result,
     });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -58,8 +60,9 @@ const createStorage = (req, res) => {
       created,
     });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -77,8 +80,9 @@ const editStorage = (req, res) => {
     editData(updated, dataPath, id);
     res.status(200).json({ message: "storage updated", status: 200 });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
@@ -92,8 +96,9 @@ const deleteStorage = (req, res) => {
     deleteData(dataPath, id);
     res.status(200).json({ message: "storage deleted", status: 200 });
   } catch (error) {
+    console.log(error.message);
     res.status(400).json({
-      message: error.message,
+      message: "an error occured",
     });
   }
 };
