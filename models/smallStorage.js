@@ -3,10 +3,8 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const SmallStorage = mongoose.model("SmallStorage", {
   _id: {
-    type: String,
-    default: function () {
-      return new ObjectId().toString();
-    },
+    type: Number,
+    default: null,
   },
   nama: {
     type: String,

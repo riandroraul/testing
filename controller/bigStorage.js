@@ -6,11 +6,22 @@ const { getAllData } = require("../utils/Helper");
 const getBigStorages = async (req, res) => {
   try {
     const bigStorages = await getAllData(BigStorage);
-    const itemInBigStg = await BigStorage.find({
-      items: { $elemMatch: { id: "632c1719b3dc6c467db6e9fd" } },
-    });
-    console.log(itemInBigStg);
     res.status(200).json(bigStorages);
+  } catch (error) {
+    console.log(error.message);
+    res.json({
+      message: error.message,
+      status: 400,
+    });
+  }
+};
+
+const findItemInStorage = async (req, res) => {
+  try {
+    const findItem = await BigStorage.findOne({
+      items: [{ id: "632c1aeb675cfe7555169228" }],
+    });
+    res.status(200).json(findItem);
   } catch (error) {
     console.log(error.message);
     res.json({
@@ -25,6 +36,11 @@ const saveItemToBigStorage = async (req, res) => {
     const item = await Item.findOne({ _id: req.body.idItem });
     const storage = await SmallStorage.findOne({ _id: req.body.idStg });
     const bigStorage = await BigStorage.findOne({ _id: req.body.idStg });
+    const findItem = await BigStorage.findOne({
+      // _id: req.body.idStg,
+      items: [{ id: req.body.idItem }],
+    });
+    console.log(bigStorage);
     if (!item || !storage) {
       throw new Error("id item or id storage not found", res.status(400));
     }
@@ -33,16 +49,29 @@ const saveItemToBigStorage = async (req, res) => {
       nama: storage.nama,
       items: { id: item._id },
     });
-    if (bigStorage) {
-      throw new Error("id storage already stored", res.status(400));
+    if (findItem) {
+      // if (findItem) {
+      throw new Error("id storage or id item already stored", res.status(400));
+      // }
     }
-    const result = await newData.save();
-    res.status(200).json({ message: "success", result });
+    if (bigStorage) {
+      if (!findItem) {
+        await BigStorage.updateOne(
+          { _id: bigStorage._id },
+          { $push: { items: { id: item._id } } }
+        );
+      } else {
+        throw new Error("id item already stored", res.status(400));
+      }
+    } else {
+      const result = await newData.save();
+      res.status(200).json({ message: "success", result });
+    }
   } catch (error) {
     console.log(error.message);
     res.json({
-      message: error.message,
       status: 400,
+      message: error.message,
     });
   }
 };
@@ -61,4 +90,5 @@ module.exports = {
   saveItemToBigStorage,
   searchItemInBigStorage,
   getBigStorages,
+  findItemInStorage,
 };

@@ -3,8 +3,8 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const BigStorage = mongoose.model("BigStorage", {
   _id: {
-    type: String,
-    default: "",
+    type: Number,
+    default: null,
   },
   nama: {
     type: String,

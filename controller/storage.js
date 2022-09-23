@@ -15,7 +15,7 @@ const getStorages = async (req, res) => {
 
 const getStorageById = async (req, res) => {
   try {
-    const storage = await smallStorage.findOne({ _id: req.params.id });
+    const storage = await SmallStorage.findOne({ _id: req.params.id });
     if (!storage) {
       throw new Error("id not found", res.status(404));
     }
@@ -34,7 +34,7 @@ const getStorageById = async (req, res) => {
 
 const createStorage = async (req, res) => {
   try {
-    const newStorage = addData(smallStorage, req);
+    const newStorage = addData(SmallStorage, req);
     const addStorage = await newStorage.save();
     res.status(200).json({ addStorage, message: "new storage added" });
   } catch (error) {
@@ -48,11 +48,11 @@ const createStorage = async (req, res) => {
 
 const editStorage = async (req, res) => {
   try {
-    const item = await smallStorage.findOne({ _id: req.params.id });
+    const item = await SmallStorage.findOne({ _id: req.params.id });
     if (!item) {
       throw new Error("id not found", res.status(404));
     }
-    const itemUpdated = await smallStorage.updateOne(
+    const itemUpdated = await SmallStorage.updateOne(
       { _id: req.params.id },
       {
         $set: {
@@ -70,7 +70,7 @@ const editStorage = async (req, res) => {
 
 const deleteStorage = async (req, res) => {
   try {
-    const deleteStorage = await smallStorage.deleteOne({ _id: req.params.id });
+    const deleteStorage = await SmallStorage.deleteOne({ _id: req.params.id });
     if (!deleteStorage) {
       throw new Error("id not found", res.status(400));
     }

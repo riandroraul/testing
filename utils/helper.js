@@ -4,6 +4,7 @@ const getAllData = (model) => {
 
 const addData = (model, req) => {
   return new model({
+    _id: req.body._id,
     nama: req.body.nama,
   });
 };
