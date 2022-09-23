@@ -1,5 +1,6 @@
+const { findOne } = require("../models/items");
 const Item = require("../models/items");
-const { getAllData, addData } = require("../utils/itemHelper");
+const { getAllData, addData } = require("../utils/Helper");
 
 const getItems = async (req, res) => {
   try {
@@ -35,8 +36,12 @@ const getItemById = async (req, res) => {
 const createItem = async (req, res) => {
   try {
     const newItem = addData(Item, req);
-    const addItem = await newItem.save();
-    res.status(200).json({ addItem, message: "new item added" });
+    const duplikat = await Item.findOne({ _id: req.body._id });
+    if (duplikat) {
+      throw new Error("id item already stored", res.status(400));
+    }
+    const result = await newItem.save();
+    res.status(200).json({ result, message: "new item added" });
   } catch (error) {
     console.log(error.message);
     res.json({

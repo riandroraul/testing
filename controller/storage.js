@@ -1,9 +1,9 @@
-const smallStorage = require("../models/smallStorage");
-const { getAllData, addData } = require("../utils/itemHelper");
+const SmallStorage = require("../models/smallStorage");
+const { getAllData, addData } = require("../utils/Helper");
 
 const getStorages = async (req, res) => {
   try {
-    const storages = await getAllData(smallStorage);
+    const storages = await getAllData(SmallStorage);
     res.status(200).json(storages);
   } catch (error) {
     console.log(error.message);
