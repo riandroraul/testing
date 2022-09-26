@@ -1,4 +1,3 @@
-const { findOne } = require("../models/items");
 const Item = require("../models/items");
 const { getAllData, addData } = require("../utils/Helper");
 
@@ -21,8 +20,9 @@ const getItemById = async (req, res) => {
       throw new Error("id not found", res.status(404));
     }
     res.status(200).json({
-      item,
+      status: 200,
       message: "buku ditemukan",
+      result: item,
     });
   } catch (error) {
     console.log(error.message);
@@ -41,7 +41,7 @@ const createItem = async (req, res) => {
       throw new Error("id item already stored", res.status(400));
     }
     const result = await newItem.save();
-    res.status(200).json({ result, message: "new item added" });
+    res.status(200).json({ status: 200, message: "new item added", result });
   } catch (error) {
     console.log(error.message);
     res.json({
@@ -65,9 +65,11 @@ const editItem = async (req, res) => {
         },
       }
     );
-    res
-      .status(200)
-      .json({ itemUpdated, message: "Data Item Berhasil Di Ubah" });
+    res.status(200).json({
+      status: 200,
+      message: "Data Item Updated",
+      result: itemUpdated,
+    });
   } catch (err) {
     res.json({ message: err.message });
   }
@@ -79,7 +81,9 @@ const deleteItem = async (req, res) => {
     if (!deleteItem) {
       throw new Error("id not found", res.status(400));
     }
-    res.status(200).json(deleteItem);
+    res
+      .status(200)
+      .json({ status: 200, message: "item deleted", result: deleteItem });
   } catch (err) {
     // res.status(404).json({message: err.message})
     res.json({ message: "id not found" });
@@ -88,7 +92,9 @@ const deleteItem = async (req, res) => {
 
 const reqError = (req, res) => {
   console.log(error.message);
-  res.status(404).json({ status: 404, message: "cannot request with this " });
+  res
+    .status(404)
+    .json({ status: 404, message: "cannot request with this endpoint" });
 };
 
 module.exports = {
@@ -99,5 +105,3 @@ module.exports = {
   deleteItem,
   reqError,
 };
-
-// module.exports = { getItems };

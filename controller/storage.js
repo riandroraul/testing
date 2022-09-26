@@ -4,7 +4,7 @@ const { getAllData, addData } = require("../utils/Helper");
 const getStorages = async (req, res) => {
   try {
     const storages = await getAllData(SmallStorage);
-    res.status(200).json(storages);
+    res.status(200).json({ status: 200, storages });
   } catch (error) {
     console.log(error.message);
     res.json({
@@ -20,8 +20,9 @@ const getStorageById = async (req, res) => {
       throw new Error("id not found", res.status(404));
     }
     res.status(200).json({
-      storage,
+      status: 200,
       message: "storage ditemukan",
+      storage,
     });
   } catch (error) {
     console.log(error.message);
@@ -36,7 +37,9 @@ const createStorage = async (req, res) => {
   try {
     const newStorage = addData(SmallStorage, req);
     const addStorage = await newStorage.save();
-    res.status(200).json({ addStorage, message: "new storage added" });
+    res
+      .status(200)
+      .json({ status: 200, message: "new storage added", addStorage });
   } catch (error) {
     console.log(error.message);
     res.json({
@@ -60,9 +63,11 @@ const editStorage = async (req, res) => {
         },
       }
     );
-    res
-      .status(200)
-      .json({ itemUpdated, message: "Data smallStorage Berhasil Di Ubah" });
+    res.status(200).json({
+      status: 200,
+      message: "Data smallStorage Berhasil Di Ubah",
+      result: itemUpdated,
+    });
   } catch (err) {
     res.json({ message: err.message });
   }
@@ -74,7 +79,9 @@ const deleteStorage = async (req, res) => {
     if (!deleteStorage) {
       throw new Error("id not found", res.status(400));
     }
-    res.status(200).json(deleteStorage);
+    res
+      .status(200)
+      .json({ status: 200, message: "storage deleted", result: deleteStorage });
   } catch (err) {
     // res.status(404).json({message: err.message})
     res.json({ message: "id not found" });
