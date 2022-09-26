@@ -8,6 +8,7 @@ const getItems = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.json({
+      status: 200,
       message: error.message,
     });
   }
@@ -27,8 +28,8 @@ const getItemById = async (req, res) => {
   } catch (error) {
     console.log(error.message);
     res.json({
-      message: error.message,
       status: 404,
+      message: error.message,
     });
   }
 };
@@ -38,15 +39,15 @@ const createItem = async (req, res) => {
     const newItem = addData(Item, req);
     const duplikat = await Item.findOne({ _id: req.body._id });
     if (duplikat) {
-      throw new Error("id item already stored", res.status(400));
+      throw new Error("id item already exist", res.status(400));
     }
     const result = await newItem.save();
     res.status(200).json({ status: 200, message: "new item added", result });
   } catch (error) {
     console.log(error.message);
     res.json({
-      message: error.message,
       status: 400,
+      message: error.message,
     });
   }
 };
@@ -71,30 +72,34 @@ const editItem = async (req, res) => {
       result: itemUpdated,
     });
   } catch (err) {
-    res.json({ message: err.message });
+    res.json({ status: 404, message: err.message });
   }
 };
 
 const deleteItem = async (req, res) => {
   try {
-    const deleteItem = await Item.deleteOne({ _id: req.params.id });
-    if (!deleteItem) {
-      throw new Error("id not found", res.status(400));
+    const item = await Item.findOne({ _id: req.params.id });
+    if (!item) {
+      throw new Error("id not found", res.status(404));
     }
+    const deleteItem = await Item.deleteOne({ _id: req.params.id });
     res
       .status(200)
       .json({ status: 200, message: "item deleted", result: deleteItem });
   } catch (err) {
     // res.status(404).json({message: err.message})
-    res.json({ message: "id not found" });
+    res.json({ status: 404, message: err.message });
   }
 };
 
 const reqError = (req, res) => {
-  console.log(error.message);
-  res
-    .status(404)
-    .json({ status: 404, message: "cannot request with this endpoint" });
+  try {
+    res
+      .status(404)
+      .json({ status: 404, message: "cannot request with this endpoint" });
+  } catch (error) {
+    console.log(error.message);
+  }
 };
 
 module.exports = {

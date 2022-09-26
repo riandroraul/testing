@@ -16,20 +16,23 @@ const getBigStorages = async (req, res) => {
   }
 };
 
-// const findItemInStorage = async (req, res) => {
-//   try {
-//     const itemExist = await BigStorage.findOne({
-//       items: [{ id: "632c1aeb675cfe7555169228" }],
-//     });
-//     res.status(200).json(itemExist);
-//   } catch (error) {
-//     console.log(error.message);
-//     res.json({
-//       message: error.message,
-//       status: 400,
-//     });
-//   }
-// };
+const getBigStorageById = async (req, res) => {
+  try {
+    const result = await BigStorage.findOne({
+      _id: parseInt(req.params.id),
+    });
+    if (!result) {
+      throw new Error("id storage not found", res.status(400));
+    }
+    res.status(200).json({ status: 200, message: "storage found", result });
+  } catch (error) {
+    console.log(error.message);
+    res.json({
+      message: error.message,
+      status: 400,
+    });
+  }
+};
 
 const saveItemToBigStorage = async (req, res) => {
   try {
@@ -101,8 +104,53 @@ const searchItemInBigStorage = async (req, res) => {
   }
 };
 
+const deleteItemInBigStorage = async (req, res) => {
+  try {
+    const itemExist = await BigStorage.findOne({
+      items: { $elemMatch: { id: parseInt(req.params.id) } },
+    });
+    if (!itemExist) {
+      throw new Error("id item not found", res.status(400));
+    }
+    console.log(itemExist);
+    const result = await BigStorage.updateOne(
+      {},
+      // { $pull: { "$[].items": { id: parseInt(req.params.id) } } }
+      { $pull: { items: { $in: [{ id: parseInt(req.params.id) }] } } }
+      // { $pull: { items: { $elemMatch: { id: parseInt(req.params.id) } } } }
+    );
+    res.status(200).json({ status: 200, message: "item found", result });
+  } catch (error) {
+    console.log(error.message);
+    res.json({
+      message: error.message,
+      status: 400,
+    });
+  }
+};
+
+const deleteBigStorage = async (req, res) => {
+  try {
+    const deleteBigStg = await BigStorage.deleteOne({ _id: req.params.id });
+    const bigStorage = await BigStorage.findOne({ _id: req.params.id });
+    if (!deleteBigStg || !bigStorage) {
+      throw new Error("id not found", res.status(400));
+    }
+    res
+      .status(200)
+      .json({ status: 200, message: "storage deleted", result: deleteBigStg });
+  } catch (error) {
+    console.log(error.message);
+    // res.status(404).json({message: err.message})
+    res.json({ status: 400, message: "id not found" });
+  }
+};
+
 module.exports = {
   saveItemToBigStorage,
   searchItemInBigStorage,
   getBigStorages,
+  getBigStorageById,
+  deleteItemInBigStorage,
+  deleteBigStorage,
 };

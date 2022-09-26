@@ -5,7 +5,6 @@ const {
   createItem,
   editItem,
   deleteItem,
-  reqError,
 } = require("../controller/item");
 
 itemRoutes.get("/", getItems);
@@ -13,6 +12,5 @@ itemRoutes.get("/idItem/:id", getItemById);
 itemRoutes.post("/create", createItem);
 itemRoutes.put("/editItem/:id", editItem);
 itemRoutes.delete("/deleteItem/:id", deleteItem);
-itemRoutes.use("/", reqError);
 
 module.exports = itemRoutes;
