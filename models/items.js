@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const Item = mongoose.model("Item", {
-  _id: {
-    type: Number,
-    default: null,
-  },
+  // _id: {
+  //   type: String,
+  //   default: null,
+  // },
   nama: {
     type: String,
     required: true,

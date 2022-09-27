@@ -37,9 +37,10 @@ const getItemById = async (req, res) => {
 const createItem = async (req, res) => {
   try {
     const newItem = addData(Item, req);
-    const duplikat = await Item.findOne({ _id: req.body._id });
+    const duplikat = await Item.findOne({ nama: req.body.nama });
+    // console.log(newItem);
     if (duplikat) {
-      throw new Error("id item already exist", res.status(400));
+      throw new Error("nama item already exist", res.status(400));
     }
     const result = await newItem.save();
     res.status(200).json({ status: 200, message: "new item added", result });

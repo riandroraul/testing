@@ -35,9 +35,9 @@ const getStorageById = async (req, res) => {
 
 const createStorage = async (req, res) => {
   try {
-    const cekIdStorage = await SmallStorage.findOne({ _id: req.body._id });
+    const cekIdStorage = await SmallStorage.findOne({ nama: req.body.nama });
     if (cekIdStorage) {
-      throw new Error("id storage already exist", res.status(400));
+      throw new Error("nama storage already exist", res.status(400));
     }
     const newStorage = addData(SmallStorage, req);
     const addStorage = await newStorage.save();
