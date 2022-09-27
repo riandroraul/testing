@@ -18,15 +18,17 @@ const getBigStorages = async (req, res) => {
 
 const getBigStorageById = async (req, res) => {
   try {
+    console.log(req.params);
+    const id = parseInt(req.params.id);
     const result = await BigStorage.findOne({
-      _id: parseInt(req.params.id),
+      _id: id,
     });
     if (!result) {
       throw new Error("id storage not found", res.status(400));
     }
     res.status(200).json({ status: 200, message: "storage found", result });
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message, 29);
     res.json({
       message: error.message,
       status: 400,
@@ -77,13 +79,14 @@ const saveItemToBigStorage = async (req, res) => {
       res.status(200).json({ message: "success", result });
     }
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message, 80);
     res.json({
       status: 400,
       message: error.message,
     });
   }
 };
+
 const searchItemInBigStorage = async (req, res) => {
   try {
     const itemExist = await BigStorage.findOne({
@@ -96,7 +99,7 @@ const searchItemInBigStorage = async (req, res) => {
       .status(200)
       .json({ status: 200, message: "item found", result: itemExist });
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message, 100);
     res.json({
       message: error.message,
       status: 400,
@@ -112,8 +115,8 @@ const deleteItemInBigStorage = async (req, res) => {
     if (!itemExist) {
       throw new Error("id item not found", res.status(400));
     }
-    console.log(itemExist);
-    const result = await BigStorage.updateOne(
+    // console.log(itemExist);
+    const result = await BigStorage.updateMany(
       {},
       // { $pull: { "$[].items": { id: parseInt(req.params.id) } } }
       { $pull: { items: { $in: [{ id: parseInt(req.params.id) }] } } }
@@ -121,7 +124,7 @@ const deleteItemInBigStorage = async (req, res) => {
     );
     res.status(200).json({ status: 200, message: "item found", result });
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message, 125);
     res.json({
       message: error.message,
       status: 400,
@@ -140,8 +143,7 @@ const deleteBigStorage = async (req, res) => {
       .status(200)
       .json({ status: 200, message: "storage deleted", result: deleteBigStg });
   } catch (error) {
-    console.log(error.message);
-    // res.status(404).json({message: err.message})
+    console.log(error.message, 144);
     res.json({ status: 400, message: "id not found" });
   }
 };

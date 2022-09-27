@@ -3,7 +3,7 @@ const itemRoutes = require("./routes/item");
 const storageRoutes = require("./routes/storage");
 const bigStgRoutes = require("./routes/bigStorage");
 const bodyParser = require("body-parser");
-const { reqError } = require("./controller/item");
+const reqError = require("./controller/error");
 
 const app = require("express")();
 const port = process.env.PORT;

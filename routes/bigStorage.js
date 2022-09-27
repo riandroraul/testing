@@ -9,9 +9,9 @@ const {
 } = require("../controller/bigStorage");
 
 bigStgRoutes.get("/", getBigStorages);
-bigStgRoutes.get("/:id", getBigStorageById);
+bigStgRoutes.get("/id/:id", getBigStorageById);
+bigStgRoutes.get("/search-item", searchItemInBigStorage);
 bigStgRoutes.post("/saveItem", saveItemToBigStorage);
-bigStgRoutes.get("/search", searchItemInBigStorage);
 bigStgRoutes.delete("/delete-item/:id", deleteItemInBigStorage);
 bigStgRoutes.delete("/delete-big-storage/:id", deleteBigStorage);
 
