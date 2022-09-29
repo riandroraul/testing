@@ -50,16 +50,16 @@ const saveItemToBigStorage = async (req, res) => {
     const itemExist = await BigStorage.findOne({
       items: { $elemMatch: { id: req.body.idItem } },
     });
-    const newData = new BigStorage({
-      _id: storage._id,
-      nama: storage.nama,
-      items: { id: item._id },
-    });
     if (itemExist) {
       // if (itemExist) {
       throw new Error("id storage or id item already stored", res.status(400));
       // }
     }
+    const newData = new BigStorage({
+      _id: storage._id,
+      nama: storage.nama,
+      items: { id: item._id },
+    });
     if (bigStorage) {
       if (!itemExist) {
         const result = await BigStorage.updateOne(
