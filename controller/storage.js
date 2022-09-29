@@ -97,7 +97,6 @@ const deleteStorage = async (req, res) => {
       .status(200)
       .json({ status: 200, message: "storage deleted", result: deleteStorage });
   } catch (err) {
-    // res.status(404).json({message: err.message})
     res.json({ status: 404, message: "id not found" });
   }
 };
