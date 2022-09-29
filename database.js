@@ -7,5 +7,5 @@ mongoose.connect(`${process.env.MONGODB_URI}/store`, {
 });
 
 mongoose.connection.on("connected", () => {
-  console.log(`${process.env.MONGODB_URI} terkoneksi...`);
+  console.log(`${process.env.MONGODB_URI} connected`);
 });

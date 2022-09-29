@@ -1,4 +1,5 @@
 const Item = require("../models/items");
+const BigStorage = require("../models/bigStorage");
 const { getAllData, addData } = require("../utils/Helper");
 
 const getItems = async (req, res) => {
@@ -90,6 +91,14 @@ const deleteItem = async (req, res) => {
     if (!item) {
       throw new Error("id not found", res.status(404));
     }
+    const itemExist = await BigStorage.findOne({
+      items: { $elemMatch: { id: req.params.id } },
+    });
+
+    if (itemExist) {
+      throw new Error("cannot delete item", res.status(400));
+    }
+
     const deleteItem = await Item.deleteOne({ _id: req.params.id });
     res
       .status(200)

@@ -1,4 +1,5 @@
 const SmallStorage = require("../models/smallStorage");
+const BigStorage = require("../models/bigStorage");
 const { getAllData, addData } = require("../utils/Helper");
 
 const getStorages = async (req, res) => {
@@ -88,16 +89,20 @@ const editStorage = async (req, res) => {
 const deleteStorage = async (req, res) => {
   try {
     const storage = await SmallStorage.findOne({ _id: req.params.id });
-
     if (!storage) {
       throw new Error("id not found", res.status(404));
     }
+    const storageExist = await BigStorage.findOne({ _id: req.params.id });
+    if (storageExist) {
+      throw new Error("cannot delete storage", res.status(400));
+    }
+
     const deleteStorage = await SmallStorage.deleteOne({ _id: req.params.id });
     res
       .status(200)
       .json({ status: 200, message: "storage deleted", result: deleteStorage });
   } catch (err) {
-    res.json({ status: 404, message: "id not found" });
+    res.json({ status: 404, message: err.message });
   }
 };
 

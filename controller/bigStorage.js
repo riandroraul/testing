@@ -136,13 +136,16 @@ const deleteBigStorage = async (req, res) => {
     if (!bigStorage) {
       throw new Error("id not found", res.status(400));
     }
+    if (bigStorage.items.length > 0) {
+      throw new Error("cannot delete storage", res.status(400));
+    }
     const deleteBigStg = await BigStorage.deleteOne({ _id: req.params.id });
     res
       .status(200)
       .json({ status: 200, message: "storage deleted", result: deleteBigStg });
   } catch (error) {
     console.log(error.message, 144);
-    res.json({ status: 400, message: "id not found" });
+    res.json({ status: 400, message: error.message });
   }
 };
 
