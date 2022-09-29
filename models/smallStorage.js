@@ -11,6 +11,7 @@ const SmallStorage = mongoose.model("SmallStorage", {
   nama: {
     type: String,
     required: true,
+    trim: true,
   },
 });
 

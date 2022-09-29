@@ -11,6 +11,7 @@ const Item = mongoose.model("Item", {
   nama: {
     type: String,
     required: true,
+    trim: true,
   },
 });
 

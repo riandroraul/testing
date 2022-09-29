@@ -10,6 +10,7 @@ const BigStorage = mongoose.model("BigStorage", {
     type: String,
     required: true,
     default: "",
+    trim: true,
   },
   items: {
     type: Array,
