@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 
 const BigStorage = mongoose.model("BigStorage", {
-  // _id: {
-  //   type: Number,
-  //   default: null,
-  // },
+  _id: {
+    type: String,
+    default: "",
+  },
   nama: {
     type: String,
     required: true,

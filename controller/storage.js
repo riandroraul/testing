@@ -35,15 +35,15 @@ const getStorageById = async (req, res) => {
 
 const createStorage = async (req, res) => {
   try {
-    const cekIdStorage = await SmallStorage.findOne({ nama: req.body.nama });
-    if (cekIdStorage) {
+    const duplikat = await SmallStorage.findOne({ nama: req.body.nama });
+    if (duplikat) {
       throw new Error("nama storage already exist", res.status(400));
     }
     const newStorage = addData(SmallStorage, req);
     const addStorage = await newStorage.save();
     res
       .status(200)
-      .json({ status: 200, message: "new storage added", addStorage });
+      .json({ status: 200, message: "new storage added", result: addStorage });
   } catch (error) {
     console.log(error.message);
     res.json({
@@ -55,9 +55,17 @@ const createStorage = async (req, res) => {
 
 const editStorage = async (req, res) => {
   try {
-    const item = await SmallStorage.findOne({ _id: req.params.id });
-    if (!item) {
-      throw new Error("id not found", res.status(404));
+    const storage = await SmallStorage.findOne({ _id: req.params.id });
+    if (!storage) {
+      const err = new Error("storage not found", res.status(404));
+      err.status = 404;
+      throw err;
+    }
+    const duplikat = await SmallStorage.findOne({ nama: req.body.nama });
+    if (duplikat) {
+      const err = new Error("storage already stored", res.status(400));
+      err.status = 400;
+      throw err;
     }
     const itemUpdated = await SmallStorage.updateOne(
       { _id: req.params.id },
@@ -69,22 +77,22 @@ const editStorage = async (req, res) => {
     );
     res.status(200).json({
       status: 200,
-      message: "Data smallStorage Berhasil Di Ubah",
+      message: "Storage Updated",
       result: itemUpdated,
     });
   } catch (err) {
-    res.json({ message: err.message });
+    res.json({ status: err.status, message: err.message });
   }
 };
 
 const deleteStorage = async (req, res) => {
   try {
-    const deleteStorage = await SmallStorage.deleteOne({ _id: req.params.id });
     const storage = await SmallStorage.findOne({ _id: req.params.id });
 
-    if (!deleteStorage || !storage) {
+    if (!storage) {
       throw new Error("id not found", res.status(404));
     }
+    const deleteStorage = await SmallStorage.deleteOne({ _id: req.params.id });
     res
       .status(200)
       .json({ status: 200, message: "storage deleted", result: deleteStorage });

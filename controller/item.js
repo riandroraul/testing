@@ -22,7 +22,7 @@ const getItemById = async (req, res) => {
     }
     res.status(200).json({
       status: 200,
-      message: "buku ditemukan",
+      message: "item ditemukan",
       result: item,
     });
   } catch (error) {
@@ -59,6 +59,12 @@ const editItem = async (req, res) => {
     if (!item) {
       throw new Error("id not found", res.status(404));
     }
+    const duplikat = await Item.findOne({ nama: req.body.nama });
+    if (duplikat) {
+      const error = new Error("nama item already exist", res.status(400));
+      error.status = 400;
+      throw error;
+    }
     const itemUpdated = await Item.updateOne(
       { _id: req.params.id },
       {
@@ -73,7 +79,8 @@ const editItem = async (req, res) => {
       result: itemUpdated,
     });
   } catch (err) {
-    res.json({ status: 404, message: err.message });
+    // console.log(err.name, err.message);
+    res.json({ status: err.status, message: err.message });
   }
 };
 
